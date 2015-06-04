@@ -1,0 +1,15 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Golang&Docker Hackathon抽奖</title>
+</head>
+<body>
+
+
+
+<div id="oknum" name="oknum" >请单击开始抽奖</div> 
+<button onclick="start()" accesskey="s">开始抽奖(<U>S</U>)</button> 
+<button onclick="stop()" accesskey="o">停止(<U>O</U>)</button> 
+<input type="text" id="showresult" value=""> 
+</body>
+</html>
