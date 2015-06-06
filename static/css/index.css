@@ -54,7 +54,8 @@ body {
   left: 50.8333333333%;
   z-index: 2;
   width: 20.4166666666%;
-  height: 378px;
+/*  height: 378px;*/
+  height: 388px;
   border-radius: 10px;
 }
 .element-4{
@@ -68,7 +69,7 @@ body {
 ._button-1 {
   clear: both;
   z-index: 3;
-  width: 7.5833333333%;
+  width: 18.233333333%;
   margin-left: 20.9166666666%;
 }
 
@@ -76,4 +77,5 @@ body {
   z-index: 4;
   width: 7.9333333333%;
   margin-left: 2.7669270833%;
+/*  display:none*/
 }
