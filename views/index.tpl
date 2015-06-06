@@ -44,7 +44,7 @@ function scroll(){
 //启动 
 function start(){ 
 	clearInterval(sysTimer); 
-	sysTimer = setInterval('scroll()',20); //越小随机变换速度越快
+	sysTimer = setInterval('scroll()',5); //越小随机变换速度越快
 } 
 
 //停止
@@ -68,18 +68,19 @@ function stop(){
 				allPersonList = null;
 				allPersonList = result.TQueuePersonList;
 				num = allPersonList.length;
-				if(result.LPersonList.length <= setLuckTotal){
-					var addHtml="" ;
-					for (var i = 0; i<result.LPersonList.length;i++){
-						addHtml += "<div>"+(i+1)+"."+result.LPersonList[i].name+"</div>";
-					}
-					document.getElementById("luckPersonList").innerHTML = addHtml;
-				}
 				if(result.LPersonList.length >= setLuckTotal){//这里取等于，是防止start在第 setLuckTotal+1 次被点击
 					$("#start").prop('onclick',null).off('click');
 					$("#stop").prop('onclick',null).off('click');
 					alert("抽奖已结束");
 				}
+				if(result.LPersonList.length <= setLuckTotal){
+					var addHtml="" ;
+					for (var i = 0; i<result.LPersonList.length;i++){
+						addHtml += "<div style=\"font-size:30px\">"+(i+1)+"."+result.LPersonList[i].name+"</div>";
+					}
+					document.getElementById("luckPersonList").innerHTML = addHtml;
+				}
+				
 			}
 		}
 	});
