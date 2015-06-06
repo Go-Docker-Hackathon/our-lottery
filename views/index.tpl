@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
-  <title>index</title>
+  <title>Golang&Docker-Hackathon 2015</title>
   <link rel="stylesheet" href="../static/css/standardize.css">
   <link rel="stylesheet" href="../static/css/index-grid.css">
   <link rel="stylesheet" href="../static/css/index.css">
@@ -13,9 +13,8 @@
 <body class="body index clearfix">
   <div class="element element-1"></div>
   <div class="element element-2" id="scrollTextArea" name="scrollTextArea">抽奖啦</div>
-  <button id="start" class="_button _button-1" type="button" onclick="start()">开 始</button>
-  <button id="stop" class="_button _button-2" type="button" onclick="stop()">停 止</button>
-
+ <div id="click_div">
+  </div>
   <div id="winprize" class="element element-3" >
 	<div class="element element-4">~中奖名单~</div>
 	<hr>
@@ -24,6 +23,14 @@
 	
 <script type="text/javascript">
 <!--
+
+
+
+$(document).ready(function() {
+	document.getElementById("click_div").innerHTML = "<button id=\"start\" class=\"_button _button-1\" type=\"button\" onclick=\"manualClick()\">开 始</button>"
+});
+
+
 
 //所有参与抽奖的人员数据
 var allPersonList = {{.QueuePersonList}} 
@@ -38,17 +45,34 @@ var randomNumber
 //滚动显示列表
 function scroll(){ 
     randomNumber = GetRandomNumber(0,num);
-	document.getElementById("scrollTextArea").innerHTML =  allPersonList[randomNumber].name; 
+	document.getElementById("scrollTextArea").innerHTML =  allPersonList[randomNumber].name;   
 }
+
+var changeFlag = false;
+function manualClick(){
+		clearInterval(sysTimer); 
+		sysTimer = setInterval('scroll()',5); //越小随机变换速度越快
+		changeFlag = true
+		document.getElementById("click_div").innerHTML = "<button id=\"stop\" class=\"_button _button-1\" type=\"button\" onclick=\"stop()\">停 止</button>";
+}
+
 
 //启动 
 function start(){ 
-	clearInterval(sysTimer); 
-	sysTimer = setInterval('scroll()',5); //越小随机变换速度越快
+
+	if(!changeFlag){
+		clearInterval(sysTimer); 
+		sysTimer = setInterval('scroll()',5); //越小随机变换速度越快
+		document.getElementById("end_div").disabled = false;
+	}else{
+		changeFlag = true;
+		stop();
+	}
 } 
 
 //停止
 function stop(){ 
+	//alert("444444");
 	clearInterval(sysTimer); 
 	//document.getElementById("luckperson").innerHTML=document.getElementById("scrollTextArea").innerText;
 	var person = {
@@ -68,17 +92,20 @@ function stop(){
 				allPersonList = null;
 				allPersonList = result.TQueuePersonList;
 				num = allPersonList.length;
-				if(result.LPersonList.length >= setLuckTotal){//这里取等于，是防止start在第 setLuckTotal+1 次被点击
-					$("#start").prop('onclick',null).off('click');
-					$("#stop").prop('onclick',null).off('click');
-					alert("抽奖已结束");
-				}
+				
 				if(result.LPersonList.length <= setLuckTotal){
 					var addHtml="" ;
 					for (var i = 0; i<result.LPersonList.length;i++){
 						addHtml += "<div style=\"font-size:30px\">"+(i+1)+"."+result.LPersonList[i].name+"</div>";
 					}
 					document.getElementById("luckPersonList").innerHTML = addHtml;
+					changeFlag = false;
+					document.getElementById("click_div").innerHTML = "<button id=\"start\" class=\"_button _button-1\" type=\"button\" onclick=\"manualClick()\">开 始</button>";
+				}
+				if(result.LPersonList.length >= setLuckTotal){//这里取等于，是防止start在第 setLuckTotal+1 次被点击
+					$("#start").prop('onclick',null).off('click');
+					$("#stop").prop('onclick',null).off('click');
+					alert("抽奖已结束");
 				}
 				
 			}
